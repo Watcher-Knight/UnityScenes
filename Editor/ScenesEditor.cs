@@ -1,5 +1,7 @@
+using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
@@ -38,10 +40,23 @@ public static class ScenesEditor
     public static void SetSceneData()
     {
         if (!File.Exists(Application.dataPath + RelativeDataPath))
-            ScriptableObject.CreateInstance<SceneData>().CreateAsset("Assets" +RelativeDataPath);
+            ScriptableObject.CreateInstance<SceneData>().CreateAsset("Assets" + RelativeDataPath);
 
         ScenePair[] scenes = SceneData.GetAllPaths().Select(p => new ScenePair(p, GetGuidFromPath(p))).ToArray();
         SceneData.SetScenes(scenes);
+    }
+
+    public static void CreateAsset<T>(this T obj, string path) where T : UnityEngine.Object
+    {
+        if (!Regex.IsMatch(path, @".asset$")) throw new ArgumentException("Path must end with .asset");
+        string[] directories = path.Split("/").SkipLast(1).ToArray();
+        string currentDirectory = Application.dataPath;
+        for (int i = 1; i < directories.Length; i++)
+        {
+            currentDirectory += "/" + directories[i];
+            if (!Directory.Exists(currentDirectory)) Directory.CreateDirectory(currentDirectory);
+        }
+        AssetDatabase.CreateAsset(obj, path);
     }
 }
 
