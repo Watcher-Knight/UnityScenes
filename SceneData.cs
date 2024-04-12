@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneData : ScriptableObject
 {
-    [SerializeField] private List<ScenePair> Scenes;
+    [HideInInspector][SerializeField] private List<ScenePair> Scenes;
 
     private static SceneData b_Instance;
     private static SceneData Instance
