@@ -2,7 +2,7 @@
     "name": "ScenesEditor",
     "rootNamespace": "",
     "references": [
-        "GUID:b8136ad175cf09a4ca0ff645921b681e"
+        "Scenes"
     ],
     "includePlatforms": [
         "Editor"
